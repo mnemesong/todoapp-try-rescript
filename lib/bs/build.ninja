@@ -8,16 +8,16 @@ rule deps
   restat = 1
 o src\TodoRun.d : deps src\TodoRun.ast
 rule mij
-  command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsc.exe" -I src -I "D:\urals-js\todoapp-try-rescript\node_modules\rescript-uuid\lib\ocaml"   -bs-package-name your-project-name -bs-package-output es6:lib\es6\$in_d:.bs.js -bs-v $g_finger $i
+  command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsc.exe" -I src -I "D:\urals-js\todoapp-try-rescript\node_modules\rescript-uuid\lib\ocaml"   -bs-package-name your-project-name -bs-package-output commonjs:lib\js\$in_d:.bs.js -bs-v $g_finger $i
   dyndep = 1
   restat = 1
-o src\TodoRun.cmj src\TodoRun.cmi ..\es6\src\TodoRun.bs.js : mij src\TodoRun.ast
+o src\TodoRun.cmj src\TodoRun.cmi ..\js\src\TodoRun.bs.js : mij src\TodoRun.ast
 o src\TodoTask.ast : astj ..\..\src\TodoTask.res
 o src\TodoTask.d : deps src\TodoTask.ast
-o src\TodoTask.cmj src\TodoTask.cmi ..\es6\src\TodoTask.bs.js : mij src\TodoTask.ast
+o src\TodoTask.cmj src\TodoTask.cmi ..\js\src\TodoTask.bs.js : mij src\TodoTask.ast
 o src\TodoService.ast : astj ..\..\src\TodoService.res
 o src\TodoService.d : deps src\TodoService.ast
-o src\TodoService.cmj src\TodoService.cmi ..\es6\src\TodoService.bs.js : mij src\TodoService.ast
+o src\TodoService.cmj src\TodoService.cmi ..\js\src\TodoService.bs.js : mij src\TodoService.ast
 o src\TodoResponsible.ast : astj ..\..\src\TodoResponsible.res
 o src\TodoResponsible.d : deps src\TodoResponsible.ast
-o src\TodoResponsible.cmj src\TodoResponsible.cmi ..\es6\src\TodoResponsible.bs.js : mij src\TodoResponsible.ast
+o src\TodoResponsible.cmj src\TodoResponsible.cmi ..\js\src\TodoResponsible.bs.js : mij src\TodoResponsible.ast

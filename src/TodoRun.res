@@ -1,4 +1,4 @@
-module TodoBrowserManager /*:ITodoBrowserManager*/ = {
+module TodoBrowserManager :TodoService.ITodoBrowserManager = {
 
     let readFormVal = (): Belt.Result.t<string, string> => try {
         let result = %raw(`
@@ -48,10 +48,10 @@ module TodoBrowserManager /*:ITodoBrowserManager*/ = {
                         + (task.isReady ? "</b>" : "")
                         + "</li>";
                     //renderResp :: Responsible -> string
-                    const renderResp = (resp) => "<li>"
-                        + "<div>" + resp.name + "</div>"
+                    const renderResp = (resp) => "<div>"
+                        + "<span>" + resp.name + "</span>"
                         + "<ul>" + resp.tasks.map(t => renderTask(t)).join() + "</ul>"
-                        + "</li>";
+                        + "</div>";
                     const respsHtml = resps.map(r => renderResp(r)).join();
                     const respsContainer = document.getElementById("respsContainer");
                     if(!respsContainer) {
@@ -89,3 +89,59 @@ module TodoBrowserManager /*:ITodoBrowserManager*/ = {
             })
         }
 }
+
+%%raw(`
+    let globState = [
+        {
+            id: "cfddfeec-436c-413b-8ea4-dc3bbd40cd53",
+            name: "Mary",
+            tasks: [
+                {
+                    id: "5b72058d-d1f9-4192-8fbd-74b63549ec6f",
+                    name: "Power up PC",
+                    isReady: false,
+                },
+                {
+                    id: "50acd125-4a6e-4af9-8fe1-2f5ae486c1c2",
+                    name: "Groove the cat",
+                    isReady: true,
+                }
+            ]
+        }
+    ]
+`)
+module TodoStateManager :TodoService.ITodoStateManager = {
+    let readResponsiblesState = 
+        (): Belt.Result.t<array<TodoResponsible.t>, string> => try {
+            let result: array<TodoResponsible.t> = %raw(`
+                globState
+            `)
+            Belt.Result.Ok(result)
+        } catch {
+            | Js.Exn.Error(obj) => Belt.Result.Error(switch Js.Exn.message(obj) {
+                | Some(msg) => msg
+                | None => ""
+            })
+        }
+
+    let writeResponsiblesState =
+        (newResps: array<TodoResponsible.t>): Belt.Result.t<unit, string> => try {
+            let result: (array<TodoResponsible.t>) => unit = %raw(`
+                function(resps) {
+                    globState = resps;
+                }
+            `)
+            Belt.Result.Ok(result(newResps))
+        } catch {
+            | Js.Exn.Error(obj) => Belt.Result.Error(switch Js.Exn.message(obj) {
+                | Some(msg) => msg
+                | None => ""
+            })
+        }
+}
+
+module TodoServiceInBrowser = 
+    TodoService.TodoService(TodoBrowserManager, TodoStateManager)
+
+TodoServiceInBrowser.rerenderClearForm(TodoServiceInBrowser.applyForm)
+TodoServiceInBrowser.rerenderResponsibles()

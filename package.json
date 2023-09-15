@@ -5,14 +5,16 @@
   "main": "index.js",
   "scripts": {
     "res:build": "rescript",
-    "res:dev": "rescript build -w"
+    "res:dev": "rescript build -w",
+    "build:browserify": "browserify ./lib/js/src/TodoRun.bs.js > resources/bundle.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "rescript": "^10.1.4",
-    "rescript-uuid": "*"
+    "rescript-uuid": "*",
+    "browserify": "^17.0.0"
   },
   "dependencies": {
     "uuid": "*"
