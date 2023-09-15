@@ -1,0 +1,23 @@
+rescript = 1
+g_finger := D:\urals-js\todoapp-try-rescript\node_modules\rescript-uuid\lib\ocaml\install.stamp
+rule astj
+  command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsc.exe"  -bs-v 10.1.4  -absname -bs-ast -o $out $i
+o src\TodoRun.ast : astj ..\..\src\TodoRun.res
+rule deps
+  command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsb_helper.exe" -hash 6041f99b9fc8b22d5081260374dbb71a $in
+  restat = 1
+o src\TodoRun.d : deps src\TodoRun.ast
+rule mij
+  command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsc.exe" -I src -I "D:\urals-js\todoapp-try-rescript\node_modules\rescript-uuid\lib\ocaml"   -bs-package-name your-project-name -bs-package-output es6:lib\es6\$in_d:.bs.js -bs-v $g_finger $i
+  dyndep = 1
+  restat = 1
+o src\TodoRun.cmj src\TodoRun.cmi ..\es6\src\TodoRun.bs.js : mij src\TodoRun.ast
+o src\TodoTask.ast : astj ..\..\src\TodoTask.res
+o src\TodoTask.d : deps src\TodoTask.ast
+o src\TodoTask.cmj src\TodoTask.cmi ..\es6\src\TodoTask.bs.js : mij src\TodoTask.ast
+o src\TodoService.ast : astj ..\..\src\TodoService.res
+o src\TodoService.d : deps src\TodoService.ast
+o src\TodoService.cmj src\TodoService.cmi ..\es6\src\TodoService.bs.js : mij src\TodoService.ast
+o src\TodoResponsible.ast : astj ..\..\src\TodoResponsible.res
+o src\TodoResponsible.d : deps src\TodoResponsible.ast
+o src\TodoResponsible.cmj src\TodoResponsible.cmi ..\es6\src\TodoResponsible.bs.js : mij src\TodoResponsible.ast

@@ -1,0 +1,22 @@
+rescript = 1
+rule cp
+  command = cmd.exe /C copy /Y $i $out >NUL
+rule touch
+ command = cmd.exe /C type nul >>$out & copy $out+,, >NUL
+o TodoRun.cmi : cp ..\bs\src\TodoRun.cmi
+o TodoRun.cmj : cp ..\bs\src\TodoRun.cmj
+o TodoRun.cmt : cp ..\bs\src\TodoRun.cmt
+o TodoRun.res : cp ..\..\src\TodoRun.res
+o TodoTask.cmi : cp ..\bs\src\TodoTask.cmi
+o TodoTask.cmj : cp ..\bs\src\TodoTask.cmj
+o TodoTask.cmt : cp ..\bs\src\TodoTask.cmt
+o TodoTask.res : cp ..\..\src\TodoTask.res
+o TodoService.cmi : cp ..\bs\src\TodoService.cmi
+o TodoService.cmj : cp ..\bs\src\TodoService.cmj
+o TodoService.cmt : cp ..\bs\src\TodoService.cmt
+o TodoService.res : cp ..\..\src\TodoService.res
+o TodoResponsible.cmi : cp ..\bs\src\TodoResponsible.cmi
+o TodoResponsible.cmj : cp ..\bs\src\TodoResponsible.cmj
+o TodoResponsible.cmt : cp ..\bs\src\TodoResponsible.cmt
+o TodoResponsible.res : cp ..\..\src\TodoResponsible.res
+build install.stamp : touch TodoRun.cmi TodoRun.cmj TodoTask.cmi TodoTask.cmj TodoService.cmi TodoService.cmj TodoResponsible.cmi TodoResponsible.cmj 
