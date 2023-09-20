@@ -56,7 +56,7 @@ module TodoService = (TBM: ITodoBrowserManager, TSM: ITodoStateManager) => {
                             if(Js.String.length(errorMsg) > 0) {
                                 Js.Console.log2("SetTaskErrors: ", errorMsg)
                             } else {
-                                Js.Console.log("")
+                                ()
                             }
                         }
                         | Error(errMsg) => Js.Console.log2("Error: ", errMsg)
@@ -68,6 +68,7 @@ module TodoService = (TBM: ITodoBrowserManager, TSM: ITodoStateManager) => {
 
     let rec changeTask = 
         (taskId: string): Belt.Result.t<unit, string> => {
+            Js.Console.log("changeTask function called")
             switch(TSM.readResponsiblesState()) {
                 | Error(errMsg) => Error(errMsg)
                 | Ok(resps) => {
@@ -106,6 +107,7 @@ module TodoService = (TBM: ITodoBrowserManager, TSM: ITodoStateManager) => {
             switch(setStateResult) {
                 | Ok(_) => {
                     rerenderClearForm(applyForm)
+                    rerenderResponsibles(changeTask)
                     Ok()
                 }
                 | Error(errMsg) => Error(errMsg)
