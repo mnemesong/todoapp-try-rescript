@@ -6,7 +6,7 @@
   "scripts": {
     "res:build": "rescript",
     "res:dev": "rescript build -w",
-    "build:browserify": "browserify ./lib/js/src/TodoRun.bs.js > resources/bundle.js"
+    "browserify": "browserify ./lib/js/src/TodoRun.bs.js > resources/bundle.js"
   },
   "keywords": [],
   "author": "",

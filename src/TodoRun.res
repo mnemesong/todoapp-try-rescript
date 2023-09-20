@@ -42,7 +42,7 @@ module TodoBrowserManager :TodoService.ITodoBrowserManager = {
             let result: (array<TodoResponsible.t>) => unit = %raw(`
                 function(resps) {
                     // renderTask :: Task -> string
-                    const renderTask = (task) => "<li>"
+                    const renderTask = (task) => "<li id='task_" + task.id +"'>"
                         + (task.isReady ? "<b>" : "")
                         + task.name
                         + (task.isReady ? "</b>" : "")
@@ -74,14 +74,33 @@ module TodoBrowserManager :TodoService.ITodoBrowserManager = {
         ): Belt.Result.t<unit, string> => try {
             let result: (() => Belt.Result.t<unit, string>) => unit = %raw(`
                 function(appFormFun) {
-                    const formBtn = document.getElementById("formBtn")
+                    const formBtn = document.getElementById("formBtn");
+                    console.log(formBtn)
                     if(!formBtn) {
                         throw new Error("unknown type of formBtn");
                     }
-                    formBtn.onchange = appFormFun
+                    formBtn.onclick = appFormFun;
                 }
             `)
             Belt.Result.Ok(result(appForm))
+        } catch {
+            | Js.Exn.Error(obj) => Belt.Result.Error(switch Js.Exn.message(obj) {
+                | Some(msg) => msg
+                | None => ""
+            })
+        }
+
+    let setTaskOnClickAction = (
+        taskId: string, 
+        changeTaskFun: (string) => Belt.Result.t<unit, string>
+    ): Belt.Result.t<unit, string> => try {
+            let result: (string, (string) => Belt.Result.t<unit, string>) => unit = %raw(`
+                function(taskId, changeTaskFun) {
+                    const curTask = document.getElementById('task_' + taskId);
+                    curTask.onclick = changeTaskFun;
+                }
+            `)
+            Belt.Result.Ok(result(taskId, changeTaskFun))
         } catch {
             | Js.Exn.Error(obj) => Belt.Result.Error(switch Js.Exn.message(obj) {
                 | Some(msg) => msg
@@ -144,4 +163,4 @@ module TodoServiceInBrowser =
     TodoService.TodoService(TodoBrowserManager, TodoStateManager)
 
 TodoServiceInBrowser.rerenderClearForm(TodoServiceInBrowser.applyForm)
-TodoServiceInBrowser.rerenderResponsibles()
+TodoServiceInBrowser.rerenderResponsibles(TodoServiceInBrowser.changeTask)

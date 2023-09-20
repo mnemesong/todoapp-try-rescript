@@ -1,2 +1,14 @@
-#Start(27417918)
-#Done(27418063)
+#Start(48308034)
+
+  Warning number 27
+  D:\urals-js\todoapp-try-rescript\src\TodoService.res:38:30
+
+  36 ┆ | Ok(state) => {
+  37 ┆     switch(TBM.renderResponsibles(state)) {
+  38 ┆         | Ok(a) => {
+  39 ┆             let tasks = Belt.Array.reduce(
+  40 ┆                 state, 
+
+  unused variable a.
+
+#Done(48308132)
