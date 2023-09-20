@@ -19,4 +19,12 @@ o TodoResponsible.cmi : cp ..\bs\src\TodoResponsible.cmi
 o TodoResponsible.cmj : cp ..\bs\src\TodoResponsible.cmj
 o TodoResponsible.cmt : cp ..\bs\src\TodoResponsible.cmt
 o TodoResponsible.res : cp ..\..\src\TodoResponsible.res
-build install.stamp : touch TodoRun.cmi TodoRun.cmj TodoTask.cmi TodoTask.cmj TodoService.cmi TodoService.cmj TodoResponsible.cmi TodoResponsible.cmj 
+o TodoStateManager.cmi : cp ..\bs\src\TodoStateManager.cmi
+o TodoStateManager.cmj : cp ..\bs\src\TodoStateManager.cmj
+o TodoStateManager.cmt : cp ..\bs\src\TodoStateManager.cmt
+o TodoStateManager.res : cp ..\..\src\TodoStateManager.res
+o TodoBrowserManager.cmi : cp ..\bs\src\TodoBrowserManager.cmi
+o TodoBrowserManager.cmj : cp ..\bs\src\TodoBrowserManager.cmj
+o TodoBrowserManager.cmt : cp ..\bs\src\TodoBrowserManager.cmt
+o TodoBrowserManager.res : cp ..\..\src\TodoBrowserManager.res
+build install.stamp : touch TodoRun.cmi TodoRun.cmj TodoTask.cmi TodoTask.cmj TodoService.cmi TodoService.cmj TodoResponsible.cmi TodoResponsible.cmj TodoStateManager.cmi TodoStateManager.cmj TodoBrowserManager.cmi TodoBrowserManager.cmj 

@@ -1,1 +1,1 @@
-src\TodoRun.cmj : src\TodoResponsible.cmj src\TodoResponsible.cmi src\TodoService.cmj src\TodoService.cmi
+src\TodoRun.cmj : src\TodoBrowserManager.cmj src\TodoBrowserManager.cmi src\TodoService.cmj src\TodoService.cmi src\TodoStateManager.cmj src\TodoStateManager.cmi

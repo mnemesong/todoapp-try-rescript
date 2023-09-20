@@ -4,7 +4,7 @@ rule astj
   command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsc.exe"  -bs-v 10.1.4  -absname -bs-ast -o $out $i
 o src\TodoRun.ast : astj ..\..\src\TodoRun.res
 rule deps
-  command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsb_helper.exe" -hash 6041f99b9fc8b22d5081260374dbb71a $in
+  command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsb_helper.exe" -hash 3d431a380d7af547739b1a4f9739449a $in
   restat = 1
 o src\TodoRun.d : deps src\TodoRun.ast
 rule mij
@@ -21,3 +21,9 @@ o src\TodoService.cmj src\TodoService.cmi ..\js\src\TodoService.bs.js : mij src\
 o src\TodoResponsible.ast : astj ..\..\src\TodoResponsible.res
 o src\TodoResponsible.d : deps src\TodoResponsible.ast
 o src\TodoResponsible.cmj src\TodoResponsible.cmi ..\js\src\TodoResponsible.bs.js : mij src\TodoResponsible.ast
+o src\TodoStateManager.ast : astj ..\..\src\TodoStateManager.res
+o src\TodoStateManager.d : deps src\TodoStateManager.ast
+o src\TodoStateManager.cmj src\TodoStateManager.cmi ..\js\src\TodoStateManager.bs.js : mij src\TodoStateManager.ast
+o src\TodoBrowserManager.ast : astj ..\..\src\TodoBrowserManager.res
+o src\TodoBrowserManager.d : deps src\TodoBrowserManager.ast
+o src\TodoBrowserManager.cmj src\TodoBrowserManager.cmi ..\js\src\TodoBrowserManager.bs.js : mij src\TodoBrowserManager.ast
