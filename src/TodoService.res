@@ -1,22 +1,32 @@
 module type ITodoBrowserManager = {
-    let readFormVal: () => Belt.Result.t<string, string>
-    let renderClearForm: () => Belt.Result.t<unit, string>
+    open Belt
+    open TodoResponsible
+
+    let readFormVal: () => Result.t<string, string>
+    let renderClearForm: () => Result.t<unit, string>
     let renderResponsibles: 
-        (array<TodoResponsible.t>) => Belt.Result.t<unit, string>
-    let setFormOnApplyAction: (() => Belt.Result.t<unit, string>) => Belt.Result.t<unit, string>
-    let setTaskOnClickAction: (string, (string) => Belt.Result.t<unit, string>) => Belt.Result.t<unit, string>
+        (array<TodoResponsible.t>) => Result.t<unit, string>
+    let setFormOnApplyAction: (() => Result.t<unit, string>) => Result.t<unit, string>
+    let setTaskOnClickAction: (string, (string) => Result.t<unit, string>) => Result.t<unit, string>
 }
 
 module type ITodoStateManager = {
+    open Belt
+    open TodoResponsible
+
     let readResponsiblesState: 
-        () => Belt.Result.t<array<TodoResponsible.t>, string>
+        () => Result.t<array<TodoResponsible.t>, string>
     let writeResponsiblesState: 
-        (array<TodoResponsible.t>) => Belt.Result.t<unit, string>
+        (array<TodoResponsible.t>) => Result.t<unit, string>
 }
 
 module TodoService = (TBM: ITodoBrowserManager, TSM: ITodoStateManager) => {
+    open Belt
+    open TodoResponsible
+    open TodoTask
+
     let rerenderClearForm = 
-        (applyForm: () => Belt.Result.t<unit, string>): unit => {
+        (applyForm: () => Result.t<unit, string>): unit => {
             switch TBM.renderClearForm() {
                 | Ok(_) => switch TBM.setFormOnApplyAction(applyForm) {
                     | Ok (_) => Js.Console.log("")
@@ -28,24 +38,24 @@ module TodoService = (TBM: ITodoBrowserManager, TSM: ITodoStateManager) => {
 
     let collectTasks = 
         (acc: array<TodoTask.t>, el: TodoResponsible.t) => 
-            Belt.Array.concat(acc, el.tasks)
+            Array.concat(acc, el.tasks)
     
     let rerenderResponsibles = 
-        (changeTaskFun: (string) => Belt.Result.t<unit, string>): unit => {
+        (changeTaskFun: (string) => Result.t<unit, string>): unit => {
             switch(TSM.readResponsiblesState()) {
                 | Ok(state) => {
                     switch(TBM.renderResponsibles(state)) {
-                        | Ok(a) => {
-                            let tasks = Belt.Array.reduce(
+                        | Ok(_) => {
+                            let tasks = Array.reduce(
                                 state, 
                                 []: array<TodoTask.t>, 
                                 collectTasks
                             )
-                            let setTaskResults = Belt.Array.map(
+                            let setTaskResults = Array.map(
                                 tasks, 
                                 (t) => TBM.setTaskOnClickAction(t.id, changeTaskFun)
                             )
-                            let errorMsgs = Belt.Array.map(
+                            let errorMsgs = Array.map(
                                 setTaskResults,
                                 (tr) => switch(tr) {
                                     | Error(errMsg) => errMsg
@@ -67,12 +77,12 @@ module TodoService = (TBM: ITodoBrowserManager, TSM: ITodoStateManager) => {
         }
 
     let rec changeTask = 
-        (taskId: string): Belt.Result.t<unit, string> => {
+        (taskId: string): Result.t<unit, string> => {
             Js.Console.log("changeTask function called")
             switch(TSM.readResponsiblesState()) {
                 | Error(errMsg) => Error(errMsg)
                 | Ok(resps) => {
-                    let newResps = Belt.Array.map(
+                    let newResps = Array.map(
                         resps, 
                         (r) => {
                             switch(TodoResponsible.switchChekedTask(r, taskId)) {
@@ -93,12 +103,12 @@ module TodoService = (TBM: ITodoBrowserManager, TSM: ITodoStateManager) => {
         }
 
     let rec applyForm = 
-        (): Belt.Result.t<unit, string> => {
+        (): Result.t<unit, string> => {
             let setStateResult = switch(TBM.readFormVal()) {
             |   Error(errMsg) => Error(errMsg)
             |   Ok(formVal) => switch TSM.readResponsiblesState() {
                 |   Error(errMsg) => Error(errMsg)
-                |   Ok(resps) => Belt.Array.map(
+                |   Ok(resps) => Array.map(
                         resps, 
                         (r) => TodoResponsible.addTask(r, TodoTask.new(formVal))
                     ) -> TSM.writeResponsiblesState
@@ -115,11 +125,11 @@ module TodoService = (TBM: ITodoBrowserManager, TSM: ITodoStateManager) => {
         }
     
     let changeChecked =
-        (taskId: string): Belt.Result.t<unit, string> => 
+        (taskId: string): Result.t<unit, string> => 
             switch (TSM.readResponsiblesState()) {
             | Error(errMsg) => Error(errMsg)
             | Ok(rs) => rs
-                ->  Belt.Array.map(r => switch(
+                ->  Array.map(r => switch(
                         TodoResponsible.switchChekedTask(r, taskId)
                     ) {
                     | Ok(rr) => rr

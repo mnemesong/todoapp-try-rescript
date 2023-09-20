@@ -1,6 +1,8 @@
 module TodoBrowserManager :TodoService.ITodoBrowserManager = {
+    open Belt
+    open TodoResponsible
 
-    let readFormVal = (): Belt.Result.t<string, string> => try {
+    let readFormVal = (): Result.t<string, string> => try {
         let result = %raw(`
             function() {
                 const v = document.getElementById("formInput").value;
@@ -9,15 +11,15 @@ module TodoBrowserManager :TodoService.ITodoBrowserManager = {
                 }
             }
         `)
-        Belt.Result.Ok(result())
+        Result.Ok(result())
     } catch {
-        | Js.Exn.Error(obj) => Belt.Result.Error(switch Js.Exn.message(obj) {
+        | Js.Exn.Error(obj) => Result.Error(switch Js.Exn.message(obj) {
             | Some(msg) => msg
             | None => ""
         })
     }
 
-    let renderClearForm = (): Belt.Result.t<unit, string> => try {
+    let renderClearForm = (): Result.t<unit, string> => try {
         let result: () => unit = %raw(`
             function() {
                 const formContainer = document.getElementById("formContainer")
@@ -30,15 +32,15 @@ module TodoBrowserManager :TodoService.ITodoBrowserManager = {
                     + "</div>"
             }
         `)
-        Belt.Result.Ok(result())
+        Result.Ok(result())
     } catch {
-        | Js.Exn.Error(obj) => Belt.Result.Error(switch Js.Exn.message(obj) {
+        | Js.Exn.Error(obj) => Result.Error(switch Js.Exn.message(obj) {
             | Some(msg) => msg
             | None => ""
         })
     }
     let renderResponsibles =
-        (resps: array<TodoResponsible.t>): Belt.Result.t<unit, string> => try {
+        (resps: array<TodoResponsible.t>): Result.t<unit, string> => try {
             let result: (array<TodoResponsible.t>) => unit = %raw(`
                 function(resps) {
                     // renderTask :: Task -> string
@@ -60,9 +62,9 @@ module TodoBrowserManager :TodoService.ITodoBrowserManager = {
                     respsContainer.innerHTML = respsHtml;
                 }
             `)
-            Belt.Result.Ok(result(resps))
+            Result.Ok(result(resps))
         } catch {
-            | Js.Exn.Error(obj) => Belt.Result.Error(switch Js.Exn.message(obj) {
+            | Js.Exn.Error(obj) => Result.Error(switch Js.Exn.message(obj) {
                 | Some(msg) => msg
                 | None => ""
             })
@@ -70,9 +72,9 @@ module TodoBrowserManager :TodoService.ITodoBrowserManager = {
     
     
     let setFormOnApplyAction = (
-            appForm: () => Belt.Result.t<unit, string>
-        ): Belt.Result.t<unit, string> => try {
-            let result: (() => Belt.Result.t<unit, string>) => unit = %raw(`
+            appForm: () => Result.t<unit, string>
+        ): Result.t<unit, string> => try {
+            let result: (() => Result.t<unit, string>) => unit = %raw(`
                 function(appFormFun) {
                     const formBtn = document.getElementById("formBtn");
                     console.log(formBtn)
@@ -82,9 +84,9 @@ module TodoBrowserManager :TodoService.ITodoBrowserManager = {
                     formBtn.onclick = appFormFun;
                 }
             `)
-            Belt.Result.Ok(result(appForm))
+            Result.Ok(result(appForm))
         } catch {
-            | Js.Exn.Error(obj) => Belt.Result.Error(switch Js.Exn.message(obj) {
+            | Js.Exn.Error(obj) => Result.Error(switch Js.Exn.message(obj) {
                 | Some(msg) => msg
                 | None => ""
             })
@@ -92,17 +94,17 @@ module TodoBrowserManager :TodoService.ITodoBrowserManager = {
 
     let setTaskOnClickAction = (
         taskId: string, 
-        changeTaskFun: (string) => Belt.Result.t<unit, string>
-    ): Belt.Result.t<unit, string> => try {
-            let result: (string, (string) => Belt.Result.t<unit, string>) => unit = %raw(`
+        changeTaskFun: (string) => Result.t<unit, string>
+    ): Result.t<unit, string> => try {
+            let result: (string, (string) => Result.t<unit, string>) => unit = %raw(`
                 function(taskId, changeTaskFun) {
                     const curTask = document.getElementById('task_' + taskId);
                     curTask.onclick = changeTaskFun;
                 }
             `)
-            Belt.Result.Ok(result(taskId, changeTaskFun))
+            Result.Ok(result(taskId, changeTaskFun))
         } catch {
-            | Js.Exn.Error(obj) => Belt.Result.Error(switch Js.Exn.message(obj) {
+            | Js.Exn.Error(obj) => Result.Error(switch Js.Exn.message(obj) {
                 | Some(msg) => msg
                 | None => ""
             })
@@ -130,29 +132,32 @@ module TodoBrowserManager :TodoService.ITodoBrowserManager = {
     ]
 `)
 module TodoStateManager :TodoService.ITodoStateManager = {
+    open Belt
+    open TodoResponsible
+
     let readResponsiblesState = 
-        (): Belt.Result.t<array<TodoResponsible.t>, string> => try {
+        (): Result.t<array<TodoResponsible.t>, string> => try {
             let result: array<TodoResponsible.t> = %raw(`
                 globState
             `)
-            Belt.Result.Ok(result)
+            Result.Ok(result)
         } catch {
-            | Js.Exn.Error(obj) => Belt.Result.Error(switch Js.Exn.message(obj) {
+            | Js.Exn.Error(obj) => Result.Error(switch Js.Exn.message(obj) {
                 | Some(msg) => msg
                 | None => ""
             })
         }
 
     let writeResponsiblesState =
-        (newResps: array<TodoResponsible.t>): Belt.Result.t<unit, string> => try {
+        (newResps: array<TodoResponsible.t>): Result.t<unit, string> => try {
             let result: (array<TodoResponsible.t>) => unit = %raw(`
                 function(resps) {
                     globState = resps;
                 }
             `)
-            Belt.Result.Ok(result(newResps))
+            Result.Ok(result(newResps))
         } catch {
-            | Js.Exn.Error(obj) => Belt.Result.Error(switch Js.Exn.message(obj) {
+            | Js.Exn.Error(obj) => Result.Error(switch Js.Exn.message(obj) {
                 | Some(msg) => msg
                 | None => ""
             })

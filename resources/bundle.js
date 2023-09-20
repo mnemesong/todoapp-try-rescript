@@ -40,7 +40,7 @@ function switchChekedTask(t, taskId) {
               name: t.name,
               tasks: Belt_Array.map(t.tasks, (function (tt) {
                       if (tt.id === taskId) {
-                        return TodoTask.switchChecked(tt);
+                        return TodoTask.TodoTask.switchChecked(tt);
                       } else {
                         return tt;
                       }
@@ -55,8 +55,12 @@ function switchChekedTask(t, taskId) {
   }
 }
 
-exports.addTask = addTask;
-exports.switchChekedTask = switchChekedTask;
+var TodoResponsible = {
+  addTask: addTask,
+  switchChekedTask: switchChekedTask
+};
+
+exports.TodoResponsible = TodoResponsible;
 /* TodoTask Not a pure module */
 
 },{"./TodoTask.bs.js":4,"rescript/lib/js/belt_Array.js":5}],2:[function(require,module,exports){
@@ -334,8 +338,8 @@ function TodoService(TBM, TSM) {
     var state = Curry._1(TSM.readResponsiblesState, undefined);
     if (state.TAG === /* Ok */0) {
       var state$1 = state._0;
-      var a = Curry._1(TBM.renderResponsibles, state$1);
-      if (a.TAG === /* Ok */0) {
+      var errMsg = Curry._1(TBM.renderResponsibles, state$1);
+      if (errMsg.TAG === /* Ok */0) {
         var tasks = Belt_Array.reduce(state$1, [], collectTasks);
         var setTaskResults = Belt_Array.map(tasks, (function (t) {
                 return Curry._2(TBM.setTaskOnClickAction, t.id, changeTaskFun);
@@ -355,7 +359,7 @@ function TodoService(TBM, TSM) {
           return ;
         }
       }
-      console.log("Error: ", a._0);
+      console.log("Error: ", errMsg._0);
       return ;
     }
     console.log("Error: ", state._0);
@@ -370,7 +374,7 @@ function TodoService(TBM, TSM) {
             };
     }
     var newResps = Belt_Array.map(errMsg._0, (function (r) {
-            var nr = TodoResponsible.switchChekedTask(r, taskId);
+            var nr = TodoResponsible.TodoResponsible.switchChekedTask(r, taskId);
             if (nr.TAG === /* Ok */0) {
               return nr._0;
             } else {
@@ -397,7 +401,7 @@ function TodoService(TBM, TSM) {
       var formVal = errMsg._0;
       var errMsg$1 = Curry._1(TSM.readResponsiblesState, undefined);
       setStateResult = errMsg$1.TAG === /* Ok */0 ? Curry._1(TSM.writeResponsiblesState, Belt_Array.map(errMsg$1._0, (function (r) {
-                    return TodoResponsible.addTask(r, TodoTask.$$new(formVal));
+                    return TodoResponsible.TodoResponsible.addTask(r, TodoTask.TodoTask.$$new(formVal));
                   }))) : ({
             TAG: /* Error */1,
             _0: errMsg$1._0
@@ -425,7 +429,7 @@ function TodoService(TBM, TSM) {
     var errMsg = Curry._1(TSM.readResponsiblesState, undefined);
     if (errMsg.TAG === /* Ok */0) {
       return Curry._1(TSM.writeResponsiblesState, Belt_Array.map(errMsg._0, (function (r) {
-                        var rr = TodoResponsible.switchChekedTask(r, taskId);
+                        var rr = TodoResponsible.TodoResponsible.switchChekedTask(r, taskId);
                         if (rr.TAG === /* Ok */0) {
                           return rr._0;
                         } else {
@@ -474,8 +478,12 @@ function switchChecked(t) {
         };
 }
 
-exports.$$new = $$new;
-exports.switchChecked = switchChecked;
+var TodoTask = {
+  $$new: $$new,
+  switchChecked: switchChecked
+};
+
+exports.TodoTask = TodoTask;
 /* uuid Not a pure module */
 
 },{"uuid":17}],5:[function(require,module,exports){
