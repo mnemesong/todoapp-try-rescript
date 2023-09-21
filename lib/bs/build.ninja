@@ -4,7 +4,7 @@ rule astj
   command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsc.exe"  -bs-v 10.1.4  -absname -bs-ast -o $out $i
 o src\TodoRun.ast : astj ..\..\src\TodoRun.res
 rule deps
-  command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsb_helper.exe" -hash 3d431a380d7af547739b1a4f9739449a $in
+  command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsb_helper.exe" -hash 56b00c2040d0dbd3e282ea86dc65fe76 $in
   restat = 1
 o src\TodoRun.d : deps src\TodoRun.ast
 rule mij
@@ -15,6 +15,9 @@ o src\TodoRun.cmj src\TodoRun.cmi ..\js\src\TodoRun.bs.js : mij src\TodoRun.ast
 o src\TodoTask.ast : astj ..\..\src\TodoTask.res
 o src\TodoTask.d : deps src\TodoTask.ast
 o src\TodoTask.cmj src\TodoTask.cmi ..\js\src\TodoTask.bs.js : mij src\TodoTask.ast
+o src\ResultMonad.ast : astj ..\..\src\ResultMonad.res
+o src\ResultMonad.d : deps src\ResultMonad.ast
+o src\ResultMonad.cmj src\ResultMonad.cmi ..\js\src\ResultMonad.bs.js : mij src\ResultMonad.ast
 o src\TodoService.ast : astj ..\..\src\TodoService.res
 o src\TodoService.d : deps src\TodoService.ast
 o src\TodoService.cmj src\TodoService.cmi ..\js\src\TodoService.bs.js : mij src\TodoService.ast

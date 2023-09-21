@@ -16,4 +16,6 @@ module TodoTask = {
         name: t.name,
         isReady: !t.isReady
     })
+
+    let refreshSame = (old: t, new: t): t => (new.id == old.id) ? new : old
 }

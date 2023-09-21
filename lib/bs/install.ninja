@@ -11,6 +11,10 @@ o TodoTask.cmi : cp ..\bs\src\TodoTask.cmi
 o TodoTask.cmj : cp ..\bs\src\TodoTask.cmj
 o TodoTask.cmt : cp ..\bs\src\TodoTask.cmt
 o TodoTask.res : cp ..\..\src\TodoTask.res
+o ResultMonad.cmi : cp ..\bs\src\ResultMonad.cmi
+o ResultMonad.cmj : cp ..\bs\src\ResultMonad.cmj
+o ResultMonad.cmt : cp ..\bs\src\ResultMonad.cmt
+o ResultMonad.res : cp ..\..\src\ResultMonad.res
 o TodoService.cmi : cp ..\bs\src\TodoService.cmi
 o TodoService.cmj : cp ..\bs\src\TodoService.cmj
 o TodoService.cmt : cp ..\bs\src\TodoService.cmt
@@ -27,4 +31,4 @@ o TodoBrowserManager.cmi : cp ..\bs\src\TodoBrowserManager.cmi
 o TodoBrowserManager.cmj : cp ..\bs\src\TodoBrowserManager.cmj
 o TodoBrowserManager.cmt : cp ..\bs\src\TodoBrowserManager.cmt
 o TodoBrowserManager.res : cp ..\..\src\TodoBrowserManager.res
-build install.stamp : touch TodoRun.cmi TodoRun.cmj TodoTask.cmi TodoTask.cmj TodoService.cmi TodoService.cmj TodoResponsible.cmi TodoResponsible.cmj TodoStateManager.cmi TodoStateManager.cmj TodoBrowserManager.cmi TodoBrowserManager.cmj 
+build install.stamp : touch TodoRun.cmi TodoRun.cmj TodoTask.cmi TodoTask.cmj ResultMonad.cmi ResultMonad.cmj TodoService.cmi TodoService.cmj TodoResponsible.cmi TodoResponsible.cmj TodoStateManager.cmi TodoStateManager.cmj TodoBrowserManager.cmi TodoBrowserManager.cmj 

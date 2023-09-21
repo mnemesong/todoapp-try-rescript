@@ -24,14 +24,14 @@ module TodoService = (TBM: ITodoBrowserManager, TSM: ITodoStateManager) => {
     open Belt
     open TodoResponsible
     open TodoTask
+    open ResultMonad
 
     let rerenderClearForm = 
         (applyForm: () => Result.t<unit, string>): unit => {
-            switch TBM.renderClearForm() {
-                | Ok(_) => switch TBM.setFormOnApplyAction(applyForm) {
-                    | Ok (_) => Js.Console.log("")
-                    | Error(errMsg) => Js.Console.log2("Error:", errMsg)
-                }
+            let result = TBM.renderClearForm()
+                -> ResultMonad.bind(() => TBM.setFormOnApplyAction(applyForm))
+            switch(result) {
+                | Ok(_) => ()
                 | Error(errMsg) => Js.Console.log2("Error:", errMsg)
             }
         }
@@ -42,100 +42,78 @@ module TodoService = (TBM: ITodoBrowserManager, TSM: ITodoStateManager) => {
     
     let rerenderResponsibles = 
         (changeTaskFun: (string) => Result.t<unit, string>): unit => {
-            switch(TSM.readResponsiblesState()) {
-                | Ok(state) => {
-                    switch(TBM.renderResponsibles(state)) {
-                        | Ok(_) => {
-                            let tasks = Array.reduce(
-                                state, 
-                                []: array<TodoTask.t>, 
-                                collectTasks
-                            )
-                            let setTaskResults = Array.map(
-                                tasks, 
-                                (t) => TBM.setTaskOnClickAction(t.id, changeTaskFun)
-                            )
-                            let errorMsgs = Array.map(
-                                setTaskResults,
-                                (tr) => switch(tr) {
-                                    | Error(errMsg) => errMsg
-                                    | Ok(_) => ""
-                                }
-                            )
-                            let errorMsg = Js.String.concatMany(errorMsgs, "")
-                            if(Js.String.length(errorMsg) > 0) {
-                                Js.Console.log2("SetTaskErrors: ", errorMsg)
-                            } else {
-                                ()
-                            }
+            let result = TSM.readResponsiblesState()
+                -> ResultMonad.bind(state => TBM.renderResponsibles(state))
+                -> ResultMonad.bind(() => TSM.readResponsiblesState())
+                -> ResultMonad.map(state => Array.reduce(
+                    state, 
+                    []: array<TodoTask.t>, 
+                    collectTasks
+                ))
+                -> ResultMonad.bind(tasks => {
+                    let errorMsg = Array.map(
+                        tasks, 
+                        (t) => TBM.setTaskOnClickAction(t.id, changeTaskFun)
+                    ) -> Array.map(
+                        (tr) => switch(tr) {
+                            | Error(errMsg) => errMsg
+                            | Ok(_) => ""
                         }
-                        | Error(errMsg) => Js.Console.log2("Error: ", errMsg)
-                    }
+                    ) -> Js.String.concatMany("")
+                    (Js.String.length(errorMsg) > 0)
+                        ? Error("SetTaskErrors: " ++ errorMsg)
+                        : Ok()
+                })
+            switch result {
+                | Ok(_) => ()
+                | Error(errMsg) => {
+                    Js.Console.log(errMsg)
                 }
-                | Error(errMsg) => Js.Console.log2("Error: ", errMsg)
             }
+            
         }
 
     let rec changeTask = 
         (taskId: string): Result.t<unit, string> => {
             Js.Console.log("changeTask function called")
-            switch(TSM.readResponsiblesState()) {
-                | Error(errMsg) => Error(errMsg)
-                | Ok(resps) => {
-                    let newResps = Array.map(
-                        resps, 
-                        (r) => {
-                            switch(TodoResponsible.switchChekedTask(r, taskId)) {
-                                | Error(_) => r
-                                | Ok(nr) => nr
-                            }
-                        }
-                    )
-                    switch(TSM.writeResponsiblesState(newResps)) {
-                        | Error(errMsg) => Error(errMsg)
-                        | Ok() => {
-                            rerenderResponsibles(changeTask)
-                            Ok()
-                        }
+            TSM.readResponsiblesState()
+                -> ResultMonad.map(resps => Array.map(resps, (r) => 
+                    switch(TodoResponsible.switchChekedTask(r, taskId)) {
+                        | Error(_) => r
+                        | Ok(nr) => nr
                     }
-                }
-            }
+                ))
+                -> ResultMonad.bind(TSM.writeResponsiblesState)
+                -> ResultMonad.map(() => rerenderResponsibles(changeTask))
         }
+
+    type complexType = {
+        formVal: string, 
+        resps: ResultMonad.t<array<TodoResponsible.t>>
+    }
 
     let rec applyForm = 
         (): Result.t<unit, string> => {
-            let setStateResult = switch(TBM.readFormVal()) {
-            |   Error(errMsg) => Error(errMsg)
-            |   Ok(formVal) => switch TSM.readResponsiblesState() {
-                |   Error(errMsg) => Error(errMsg)
-                |   Ok(resps) => Array.map(
+            (TBM.readFormVal(), TSM.readResponsiblesState())
+                -> ResultMonad.liftTuple
+                -> ResultMonad.map((tuple) => {
+                    let (formVal, resps) = tuple
+                    Array.map(
                         resps, 
                         (r) => TodoResponsible.addTask(r, TodoTask.new(formVal))
-                    ) -> TSM.writeResponsiblesState
-                }
-            }
-            switch(setStateResult) {
-                | Ok(_) => {
-                    rerenderClearForm(applyForm)
-                    rerenderResponsibles(changeTask)
-                    Ok()
-                }
-                | Error(errMsg) => Error(errMsg)
-            }
+                    )
+                })
+                -> ResultMonad.bind(TSM.writeResponsiblesState)
+                -> ResultMonad.map(() => rerenderClearForm(applyForm))
+                -> ResultMonad.map(() => rerenderResponsibles(changeTask))
         }
     
     let changeChecked =
-        (taskId: string): Result.t<unit, string> => 
-            switch (TSM.readResponsiblesState()) {
-            | Error(errMsg) => Error(errMsg)
-            | Ok(rs) => rs
-                ->  Array.map(r => switch(
-                        TodoResponsible.switchChekedTask(r, taskId)
-                    ) {
-                    | Ok(rr) => rr
-                    | Error(_) => r
-                })
-                ->  TSM.writeResponsiblesState
-            }
+        (taskId: string): Result.t<unit, string> => {
+            TSM.readResponsiblesState()
+                -> ResultMonad.bind(rs => Array.map(rs, r => 
+                    TodoResponsible.tryToSwitchChackedTask(r, taskId)
+                ) -> TSM.writeResponsiblesState)
+        }
 
 }
