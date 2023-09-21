@@ -1,1 +1,1 @@
-{ "dirs" : [ "src" ] , "pkgs" : [ [ "rescript-uuid" , "D:\\urals-js\\todoapp-try-rescript\\node_modules\\rescript-uuid" ] ] , "generated" : [] }
+{ "dirs" : [ "test" , "src" ] , "pkgs" : [ [ "rescript-uuid" , "D:\\urals-js\\todoapp-try-rescript\\node_modules\\rescript-uuid" ] , [ "rescript-mocha" , "D:\\urals-js\\todoapp-try-rescript\\node_modules\\rescript-mocha" ] ] , "generated" : [] }

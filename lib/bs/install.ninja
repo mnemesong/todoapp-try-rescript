@@ -3,6 +3,10 @@ rule cp
   command = cmd.exe /C copy /Y $i $out >NUL
 rule touch
  command = cmd.exe /C type nul >>$out & copy $out+,, >NUL
+o TodoTaskTest.cmi : cp ..\bs\test\TodoTaskTest.cmi
+o TodoTaskTest.cmj : cp ..\bs\test\TodoTaskTest.cmj
+o TodoTaskTest.cmt : cp ..\bs\test\TodoTaskTest.cmt
+o TodoTaskTest.res : cp ..\..\test\TodoTaskTest.res
 o TodoRun.cmi : cp ..\bs\src\TodoRun.cmi
 o TodoRun.cmj : cp ..\bs\src\TodoRun.cmj
 o TodoRun.cmt : cp ..\bs\src\TodoRun.cmt
@@ -31,4 +35,4 @@ o TodoBrowserManager.cmi : cp ..\bs\src\TodoBrowserManager.cmi
 o TodoBrowserManager.cmj : cp ..\bs\src\TodoBrowserManager.cmj
 o TodoBrowserManager.cmt : cp ..\bs\src\TodoBrowserManager.cmt
 o TodoBrowserManager.res : cp ..\..\src\TodoBrowserManager.res
-build install.stamp : touch TodoRun.cmi TodoRun.cmj TodoTask.cmi TodoTask.cmj ResultMonad.cmi ResultMonad.cmj TodoService.cmi TodoService.cmj TodoResponsible.cmi TodoResponsible.cmj TodoStateManager.cmi TodoStateManager.cmj TodoBrowserManager.cmi TodoBrowserManager.cmj 
+build install.stamp : touch TodoTaskTest.cmi TodoTaskTest.cmj TodoRun.cmi TodoRun.cmj TodoTask.cmi TodoTask.cmj ResultMonad.cmi ResultMonad.cmj TodoService.cmi TodoService.cmj TodoResponsible.cmi TodoResponsible.cmj TodoStateManager.cmi TodoStateManager.cmj TodoBrowserManager.cmi TodoBrowserManager.cmj 

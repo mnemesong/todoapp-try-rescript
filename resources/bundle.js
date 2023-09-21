@@ -207,6 +207,7 @@ function setTaskOnClickAction(taskId, changeTaskFun) {
   try {
     var result = (function(taskId, changeTaskFun) {
                     const curTask = document.getElementById('task_' + taskId);
+                    console.log("Setting task onclick action to element: ", curTask);
                     curTask.onclick = changeTaskFun;
                 });
     return {
@@ -335,6 +336,45 @@ var Belt_Array = require("rescript/lib/js/belt_Array.js");
 var ResultMonad = require("./ResultMonad.bs.js");
 var TodoResponsible = require("./TodoResponsible.bs.js");
 
+function collectTasks(acc, el) {
+  return Belt_Array.concat(acc, el.tasks);
+}
+
+function collectTasksFromRespsArray(state) {
+  return Belt_Array.reduce(state, [], collectTasks);
+}
+
+function collectManyErrorMsgs(results) {
+  return Js_string.concatMany(Belt_Array.map(results, (function (tr) {
+                    if (tr.TAG === /* Ok */0) {
+                      return "";
+                    } else {
+                      return tr._0;
+                    }
+                  })), "");
+}
+
+function summaryErrorMsgsToResut(errorMsg) {
+  if (errorMsg.length > 0) {
+    return {
+            TAG: /* Error */1,
+            _0: "SetTaskErrors: " + errorMsg
+          };
+  } else {
+    return {
+            TAG: /* Ok */0,
+            _0: undefined
+          };
+  }
+}
+
+var TodoServicePrivate = {
+  collectTasks: collectTasks,
+  collectTasksFromRespsArray: collectTasksFromRespsArray,
+  collectManyErrorMsgs: collectManyErrorMsgs,
+  summaryErrorMsgsToResut: summaryErrorMsgsToResut
+};
+
 function TodoService(TBM, TSM) {
   var rerenderClearForm = function (applyForm) {
     var result = ResultMonad.ResultMonad.bind(Curry._1(TBM.renderClearForm, undefined), (function (param) {
@@ -345,37 +385,15 @@ function TodoService(TBM, TSM) {
     }
     console.log("Error:", result._0);
   };
-  var collectTasks = function (acc, el) {
-    return Belt_Array.concat(acc, el.tasks);
-  };
   var rerenderResponsibles = function (changeTaskFun) {
     var result = ResultMonad.ResultMonad.bind(ResultMonad.ResultMonad.map(ResultMonad.ResultMonad.bind(ResultMonad.ResultMonad.bind(Curry._1(TSM.readResponsiblesState, undefined), (function (state) {
                         return Curry._1(TBM.renderResponsibles, state);
                       })), (function (param) {
                     return Curry._1(TSM.readResponsiblesState, undefined);
-                  })), (function (state) {
-                return Belt_Array.reduce(state, [], collectTasks);
-              })), (function (tasks) {
-            var errorMsg = Js_string.concatMany(Belt_Array.map(Belt_Array.map(tasks, (function (t) {
-                            return Curry._2(TBM.setTaskOnClickAction, t.id, changeTaskFun);
-                          })), (function (tr) {
-                        if (tr.TAG === /* Ok */0) {
-                          return "";
-                        } else {
-                          return tr._0;
-                        }
-                      })), "");
-            if (errorMsg.length > 0) {
-              return {
-                      TAG: /* Error */1,
-                      _0: "SetTaskErrors: " + errorMsg
-                    };
-            } else {
-              return {
-                      TAG: /* Ok */0,
-                      _0: undefined
-                    };
-            }
+                  })), collectTasksFromRespsArray), (function (tasks) {
+            return summaryErrorMsgsToResut(collectManyErrorMsgs(Belt_Array.map(tasks, (function (t) {
+                                  return Curry._2(TBM.setTaskOnClickAction, t.id, changeTaskFun);
+                                }))));
           }));
     if (result.TAG === /* Ok */0) {
       return ;
@@ -386,12 +404,7 @@ function TodoService(TBM, TSM) {
     console.log("changeTask function called");
     return ResultMonad.ResultMonad.map(ResultMonad.ResultMonad.bind(ResultMonad.ResultMonad.map(Curry._1(TSM.readResponsiblesState, undefined), (function (resps) {
                           return Belt_Array.map(resps, (function (r) {
-                                        var nr = TodoResponsible.TodoResponsible.switchChekedTask(r, taskId);
-                                        if (nr.TAG === /* Ok */0) {
-                                          return nr._0;
-                                        } else {
-                                          return r;
-                                        }
+                                        return TodoResponsible.TodoResponsible.tryToSwitchChackedTask(r, taskId);
                                       }));
                         })), TSM.writeResponsiblesState), (function (param) {
                   rerenderResponsibles(changeTask);
@@ -421,7 +434,6 @@ function TodoService(TBM, TSM) {
   };
   return {
           rerenderClearForm: rerenderClearForm,
-          collectTasks: collectTasks,
           rerenderResponsibles: rerenderResponsibles,
           changeTask: changeTask,
           applyForm: applyForm,
@@ -429,6 +441,7 @@ function TodoService(TBM, TSM) {
         };
 }
 
+exports.TodoServicePrivate = TodoServicePrivate;
 exports.TodoService = TodoService;
 /* TodoTask Not a pure module */
 
@@ -483,6 +496,7 @@ function readResponsiblesState(param) {
 function writeResponsiblesState(newResps) {
   try {
     var result = (function(resps) {
+                    console.log("New state: ", resps);
                     globState = resps;
                 });
     return {

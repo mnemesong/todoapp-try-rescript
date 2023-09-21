@@ -1,16 +1,20 @@
 rescript = 1
 g_finger := D:\urals-js\todoapp-try-rescript\node_modules\rescript-uuid\lib\ocaml\install.stamp
+g_finger := D:\urals-js\todoapp-try-rescript\node_modules\rescript-mocha\lib\ocaml\install.stamp
 rule astj
   command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsc.exe"  -bs-v 10.1.4  -absname -bs-ast -o $out $i
-o src\TodoRun.ast : astj ..\..\src\TodoRun.res
+o test\TodoTaskTest.ast : astj ..\..\test\TodoTaskTest.res
 rule deps
-  command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsb_helper.exe" -hash 56b00c2040d0dbd3e282ea86dc65fe76 $in
+  command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsb_helper.exe" -hash c54a5d695a70a449c707e22317326c6c $in
   restat = 1
-o src\TodoRun.d : deps src\TodoRun.ast
+o test\TodoTaskTest.d : deps test\TodoTaskTest.ast
 rule mij
-  command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsc.exe" -I src -I "D:\urals-js\todoapp-try-rescript\node_modules\rescript-uuid\lib\ocaml"   -bs-package-name your-project-name -bs-package-output commonjs:lib\js\$in_d:.bs.js -bs-v $g_finger $i
+  command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsc.exe" -I src -I test -I "D:\urals-js\todoapp-try-rescript\node_modules\rescript-uuid\lib\ocaml" -I "D:\urals-js\todoapp-try-rescript\node_modules\rescript-mocha\lib\ocaml"   -bs-package-name your-project-name -bs-package-output commonjs:lib\js\$in_d:.bs.js -bs-v $g_finger $i
   dyndep = 1
   restat = 1
+o test\TodoTaskTest.cmj test\TodoTaskTest.cmi ..\js\test\TodoTaskTest.bs.js : mij test\TodoTaskTest.ast
+o src\TodoRun.ast : astj ..\..\src\TodoRun.res
+o src\TodoRun.d : deps src\TodoRun.ast
 o src\TodoRun.cmj src\TodoRun.cmi ..\js\src\TodoRun.bs.js : mij src\TodoRun.ast
 o src\TodoTask.ast : astj ..\..\src\TodoTask.res
 o src\TodoTask.d : deps src\TodoTask.ast

@@ -3,7 +3,11 @@
     "sources": [
       {
         "dir": "src",
-        "subdirs": true
+        "subdirs": false
+      },
+      {
+        "dir": "test",
+        "subdirs": false
       }
     ],
     "package-specs": [
@@ -13,6 +17,7 @@
     ],
     "suffix": ".bs.js",
     "bs-dependencies": [
-        "rescript-uuid"
+        "rescript-uuid",
+        "rescript-mocha"
     ]
   }

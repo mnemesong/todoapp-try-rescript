@@ -99,6 +99,7 @@ module TodoBrowserManager :TodoService.ITodoBrowserManager = {
             let result: (string, (string) => Result.t<unit, string>) => unit = %raw(`
                 function(taskId, changeTaskFun) {
                     const curTask = document.getElementById('task_' + taskId);
+                    console.log("Setting task onclick action to element: ", curTask);
                     curTask.onclick = changeTaskFun;
                 }
             `)

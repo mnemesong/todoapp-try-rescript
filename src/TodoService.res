@@ -20,11 +20,45 @@ module type ITodoStateManager = {
         (array<TodoResponsible.t>) => Result.t<unit, string>
 }
 
+module TodoServicePrivate = {
+    open Belt
+    open TodoTask
+    open TodoResponsible
+    open ResultMonad
+
+    let collectTasks = 
+        (acc: array<TodoTask.t>, el: TodoResponsible.t) => 
+            Array.concat(acc, el.tasks)
+
+    let collectTasksFromRespsArray = 
+        (state) => Array.reduce(
+            state, 
+            []: array<TodoTask.t>, 
+            collectTasks
+        )
+
+    let collectManyErrorMsgs = 
+        (results: array<ResultMonad.t<unit>>) => 
+            Array.map( results, (tr) => 
+                switch(tr) {
+                    | Error(errMsg) => errMsg
+                    | Ok(_) => ""
+                }
+            ) -> Js.String.concatMany("")
+
+    let summaryErrorMsgsToResut = 
+        (errorMsg: string) =>
+            (Js.String.length(errorMsg) > 0)
+                ? Error("SetTaskErrors: " ++ errorMsg)
+                : Ok()
+}
+
 module TodoService = (TBM: ITodoBrowserManager, TSM: ITodoStateManager) => {
     open Belt
     open TodoResponsible
     open TodoTask
     open ResultMonad
+    open TodoServicePrivate
 
     let rerenderClearForm = 
         (applyForm: () => Result.t<unit, string>): unit => {
@@ -35,40 +69,22 @@ module TodoService = (TBM: ITodoBrowserManager, TSM: ITodoStateManager) => {
                 | Error(errMsg) => Js.Console.log2("Error:", errMsg)
             }
         }
-
-    let collectTasks = 
-        (acc: array<TodoTask.t>, el: TodoResponsible.t) => 
-            Array.concat(acc, el.tasks)
     
     let rerenderResponsibles = 
         (changeTaskFun: (string) => Result.t<unit, string>): unit => {
             let result = TSM.readResponsiblesState()
                 -> ResultMonad.bind(state => TBM.renderResponsibles(state))
                 -> ResultMonad.bind(() => TSM.readResponsiblesState())
-                -> ResultMonad.map(state => Array.reduce(
-                    state, 
-                    []: array<TodoTask.t>, 
-                    collectTasks
-                ))
+                -> ResultMonad.map(collectTasksFromRespsArray)
                 -> ResultMonad.bind(tasks => {
-                    let errorMsg = Array.map(
-                        tasks, 
-                        (t) => TBM.setTaskOnClickAction(t.id, changeTaskFun)
-                    ) -> Array.map(
-                        (tr) => switch(tr) {
-                            | Error(errMsg) => errMsg
-                            | Ok(_) => ""
-                        }
-                    ) -> Js.String.concatMany("")
-                    (Js.String.length(errorMsg) > 0)
-                        ? Error("SetTaskErrors: " ++ errorMsg)
-                        : Ok()
+                    Array.map( tasks,  (t) => 
+                        TBM.setTaskOnClickAction(t.id, changeTaskFun)
+                    ) -> collectManyErrorMsgs
+                    -> summaryErrorMsgsToResut
                 })
             switch result {
                 | Ok(_) => ()
-                | Error(errMsg) => {
-                    Js.Console.log(errMsg)
-                }
+                | Error(errMsg) => { Js.Console.log(errMsg) }
             }
             
         }
@@ -78,19 +94,11 @@ module TodoService = (TBM: ITodoBrowserManager, TSM: ITodoStateManager) => {
             Js.Console.log("changeTask function called")
             TSM.readResponsiblesState()
                 -> ResultMonad.map(resps => Array.map(resps, (r) => 
-                    switch(TodoResponsible.switchChekedTask(r, taskId)) {
-                        | Error(_) => r
-                        | Ok(nr) => nr
-                    }
+                    TodoResponsible.tryToSwitchChackedTask(r, taskId)
                 ))
                 -> ResultMonad.bind(TSM.writeResponsiblesState)
                 -> ResultMonad.map(() => rerenderResponsibles(changeTask))
         }
-
-    type complexType = {
-        formVal: string, 
-        resps: ResultMonad.t<array<TodoResponsible.t>>
-    }
 
     let rec applyForm = 
         (): Result.t<unit, string> => {
@@ -98,9 +106,8 @@ module TodoService = (TBM: ITodoBrowserManager, TSM: ITodoStateManager) => {
                 -> ResultMonad.liftTuple
                 -> ResultMonad.map((tuple) => {
                     let (formVal, resps) = tuple
-                    Array.map(
-                        resps, 
-                        (r) => TodoResponsible.addTask(r, TodoTask.new(formVal))
+                    Array.map( resps, (r) => 
+                        TodoResponsible.addTask(r, TodoTask.new(formVal))
                     )
                 })
                 -> ResultMonad.bind(TSM.writeResponsiblesState)
