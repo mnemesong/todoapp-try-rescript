@@ -7,6 +7,10 @@ o TodoTaskTest.cmi : cp ..\bs\test\TodoTaskTest.cmi
 o TodoTaskTest.cmj : cp ..\bs\test\TodoTaskTest.cmj
 o TodoTaskTest.cmt : cp ..\bs\test\TodoTaskTest.cmt
 o TodoTaskTest.res : cp ..\..\test\TodoTaskTest.res
+o TodoResponsibleTest.cmi : cp ..\bs\test\TodoResponsibleTest.cmi
+o TodoResponsibleTest.cmj : cp ..\bs\test\TodoResponsibleTest.cmj
+o TodoResponsibleTest.cmt : cp ..\bs\test\TodoResponsibleTest.cmt
+o TodoResponsibleTest.res : cp ..\..\test\TodoResponsibleTest.res
 o TodoRun.cmi : cp ..\bs\src\TodoRun.cmi
 o TodoRun.cmj : cp ..\bs\src\TodoRun.cmj
 o TodoRun.cmt : cp ..\bs\src\TodoRun.cmt
@@ -35,4 +39,4 @@ o TodoBrowserManager.cmi : cp ..\bs\src\TodoBrowserManager.cmi
 o TodoBrowserManager.cmj : cp ..\bs\src\TodoBrowserManager.cmj
 o TodoBrowserManager.cmt : cp ..\bs\src\TodoBrowserManager.cmt
 o TodoBrowserManager.res : cp ..\..\src\TodoBrowserManager.res
-build install.stamp : touch TodoTaskTest.cmi TodoTaskTest.cmj TodoRun.cmi TodoRun.cmj TodoTask.cmi TodoTask.cmj ResultMonad.cmi ResultMonad.cmj TodoService.cmi TodoService.cmj TodoResponsible.cmi TodoResponsible.cmj TodoStateManager.cmi TodoStateManager.cmj TodoBrowserManager.cmi TodoBrowserManager.cmj 
+build install.stamp : touch TodoTaskTest.cmi TodoTaskTest.cmj TodoResponsibleTest.cmi TodoResponsibleTest.cmj TodoRun.cmi TodoRun.cmj TodoTask.cmi TodoTask.cmj ResultMonad.cmi ResultMonad.cmj TodoService.cmi TodoService.cmj TodoResponsible.cmi TodoResponsible.cmj TodoStateManager.cmi TodoStateManager.cmj TodoBrowserManager.cmi TodoBrowserManager.cmj 

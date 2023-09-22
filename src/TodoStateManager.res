@@ -39,7 +39,6 @@ module TodoStateManager :TodoService.ITodoStateManager = {
         (newResps: array<TodoResponsible.t>): Result.t<unit, string> => try {
             let result: (array<TodoResponsible.t>) => unit = %raw(`
                 function(resps) {
-                    console.log("New state: ", resps);
                     globState = resps;
                 }
             `)

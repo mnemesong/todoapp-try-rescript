@@ -77,7 +77,6 @@ module TodoBrowserManager :TodoService.ITodoBrowserManager = {
             let result: (() => Result.t<unit, string>) => unit = %raw(`
                 function(appFormFun) {
                     const formBtn = document.getElementById("formBtn");
-                    console.log(formBtn)
                     if(!formBtn) {
                         throw new Error("unknown type of formBtn");
                     }
@@ -99,8 +98,7 @@ module TodoBrowserManager :TodoService.ITodoBrowserManager = {
             let result: (string, (string) => Result.t<unit, string>) => unit = %raw(`
                 function(taskId, changeTaskFun) {
                     const curTask = document.getElementById('task_' + taskId);
-                    console.log("Setting task onclick action to element: ", curTask);
-                    curTask.onclick = changeTaskFun;
+                    curTask.onclick = () => changeTaskFun(taskId);
                 }
             `)
             Result.Ok(result(taskId, changeTaskFun))

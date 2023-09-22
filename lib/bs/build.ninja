@@ -5,7 +5,7 @@ rule astj
   command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsc.exe"  -bs-v 10.1.4  -absname -bs-ast -o $out $i
 o test\TodoTaskTest.ast : astj ..\..\test\TodoTaskTest.res
 rule deps
-  command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsb_helper.exe" -hash c54a5d695a70a449c707e22317326c6c $in
+  command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsb_helper.exe" -hash b787240791ac9032cb3b089c75acf5a4 $in
   restat = 1
 o test\TodoTaskTest.d : deps test\TodoTaskTest.ast
 rule mij
@@ -13,6 +13,9 @@ rule mij
   dyndep = 1
   restat = 1
 o test\TodoTaskTest.cmj test\TodoTaskTest.cmi ..\js\test\TodoTaskTest.bs.js : mij test\TodoTaskTest.ast
+o test\TodoResponsibleTest.ast : astj ..\..\test\TodoResponsibleTest.res
+o test\TodoResponsibleTest.d : deps test\TodoResponsibleTest.ast
+o test\TodoResponsibleTest.cmj test\TodoResponsibleTest.cmi ..\js\test\TodoResponsibleTest.bs.js : mij test\TodoResponsibleTest.ast
 o src\TodoRun.ast : astj ..\..\src\TodoRun.res
 o src\TodoRun.d : deps src\TodoRun.ast
 o src\TodoRun.cmj src\TodoRun.cmi ..\js\src\TodoRun.bs.js : mij src\TodoRun.ast

@@ -91,10 +91,10 @@ module TodoService = (TBM: ITodoBrowserManager, TSM: ITodoStateManager) => {
 
     let rec changeTask = 
         (taskId: string): Result.t<unit, string> => {
-            Js.Console.log("changeTask function called")
             TSM.readResponsiblesState()
-                -> ResultMonad.map(resps => Array.map(resps, (r) => 
-                    TodoResponsible.tryToSwitchChackedTask(r, taskId)
+                -> ResultMonad.map(resps => Array.map(resps, (r) => {
+                        TodoResponsible.tryToSwitchChackedTask(r, taskId)
+                    }
                 ))
                 -> ResultMonad.bind(TSM.writeResponsiblesState)
                 -> ResultMonad.map(() => rerenderResponsibles(changeTask))

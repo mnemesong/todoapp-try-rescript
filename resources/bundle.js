@@ -179,7 +179,6 @@ function setFormOnApplyAction(appForm) {
   try {
     var result = (function(appFormFun) {
                     const formBtn = document.getElementById("formBtn");
-                    console.log(formBtn)
                     if(!formBtn) {
                         throw new Error("unknown type of formBtn");
                     }
@@ -207,8 +206,7 @@ function setTaskOnClickAction(taskId, changeTaskFun) {
   try {
     var result = (function(taskId, changeTaskFun) {
                     const curTask = document.getElementById('task_' + taskId);
-                    console.log("Setting task onclick action to element: ", curTask);
-                    curTask.onclick = changeTaskFun;
+                    curTask.onclick = () => changeTaskFun(taskId);
                 });
     return {
             TAG: /* Ok */0,
@@ -401,7 +399,6 @@ function TodoService(TBM, TSM) {
     console.log(result._0);
   };
   var changeTask = function (taskId) {
-    console.log("changeTask function called");
     return ResultMonad.ResultMonad.map(ResultMonad.ResultMonad.bind(ResultMonad.ResultMonad.map(Curry._1(TSM.readResponsiblesState, undefined), (function (resps) {
                           return Belt_Array.map(resps, (function (r) {
                                         return TodoResponsible.TodoResponsible.tryToSwitchChackedTask(r, taskId);
@@ -496,7 +493,6 @@ function readResponsiblesState(param) {
 function writeResponsiblesState(newResps) {
   try {
     var result = (function(resps) {
-                    console.log("New state: ", resps);
                     globState = resps;
                 });
     return {
