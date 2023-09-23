@@ -3,37 +3,40 @@ g_finger := D:\urals-js\todoapp-try-rescript\node_modules\rescript-uuid\lib\ocam
 g_finger := D:\urals-js\todoapp-try-rescript\node_modules\rescript-mocha\lib\ocaml\install.stamp
 rule astj
   command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsc.exe"  -bs-v 10.1.4  -absname -bs-ast -o $out $i
-o test\TodoTaskTest.ast : astj ..\..\test\TodoTaskTest.res
+o rescript\TodoRun.ast : astj ..\..\rescript\TodoRun.res
 rule deps
-  command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsb_helper.exe" -hash b787240791ac9032cb3b089c75acf5a4 $in
+  command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsb_helper.exe" -hash fc262227df1cf2272c71634e7c485b70 $in
   restat = 1
-o test\TodoTaskTest.d : deps test\TodoTaskTest.ast
+o rescript\TodoRun.d : deps rescript\TodoRun.ast
 rule mij
-  command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsc.exe" -I src -I test -I "D:\urals-js\todoapp-try-rescript\node_modules\rescript-uuid\lib\ocaml" -I "D:\urals-js\todoapp-try-rescript\node_modules\rescript-mocha\lib\ocaml"   -bs-package-name your-project-name -bs-package-output commonjs:lib\js\$in_d:.bs.js -bs-v $g_finger $i
+  command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsc.exe" -I "rescript\infrastructure" -I "rescript\infrastructure-test" -I "rescript\protocols" -I "rescript\src" -I "rescript\src-test" -I rescript -I "D:\urals-js\todoapp-try-rescript\node_modules\rescript-uuid\lib\ocaml" -I "D:\urals-js\todoapp-try-rescript\node_modules\rescript-mocha\lib\ocaml"   -bs-package-name your-project-name -bs-package-output commonjs:lib\js\$in_d:.bs.js -bs-v $g_finger $i
   dyndep = 1
   restat = 1
-o test\TodoTaskTest.cmj test\TodoTaskTest.cmi ..\js\test\TodoTaskTest.bs.js : mij test\TodoTaskTest.ast
-o test\TodoResponsibleTest.ast : astj ..\..\test\TodoResponsibleTest.res
-o test\TodoResponsibleTest.d : deps test\TodoResponsibleTest.ast
-o test\TodoResponsibleTest.cmj test\TodoResponsibleTest.cmi ..\js\test\TodoResponsibleTest.bs.js : mij test\TodoResponsibleTest.ast
-o src\TodoRun.ast : astj ..\..\src\TodoRun.res
-o src\TodoRun.d : deps src\TodoRun.ast
-o src\TodoRun.cmj src\TodoRun.cmi ..\js\src\TodoRun.bs.js : mij src\TodoRun.ast
-o src\TodoTask.ast : astj ..\..\src\TodoTask.res
-o src\TodoTask.d : deps src\TodoTask.ast
-o src\TodoTask.cmj src\TodoTask.cmi ..\js\src\TodoTask.bs.js : mij src\TodoTask.ast
-o src\ResultMonad.ast : astj ..\..\src\ResultMonad.res
-o src\ResultMonad.d : deps src\ResultMonad.ast
-o src\ResultMonad.cmj src\ResultMonad.cmi ..\js\src\ResultMonad.bs.js : mij src\ResultMonad.ast
-o src\TodoService.ast : astj ..\..\src\TodoService.res
-o src\TodoService.d : deps src\TodoService.ast
-o src\TodoService.cmj src\TodoService.cmi ..\js\src\TodoService.bs.js : mij src\TodoService.ast
-o src\TodoResponsible.ast : astj ..\..\src\TodoResponsible.res
-o src\TodoResponsible.d : deps src\TodoResponsible.ast
-o src\TodoResponsible.cmj src\TodoResponsible.cmi ..\js\src\TodoResponsible.bs.js : mij src\TodoResponsible.ast
-o src\TodoStateManager.ast : astj ..\..\src\TodoStateManager.res
-o src\TodoStateManager.d : deps src\TodoStateManager.ast
-o src\TodoStateManager.cmj src\TodoStateManager.cmi ..\js\src\TodoStateManager.bs.js : mij src\TodoStateManager.ast
-o src\TodoBrowserManager.ast : astj ..\..\src\TodoBrowserManager.res
-o src\TodoBrowserManager.d : deps src\TodoBrowserManager.ast
-o src\TodoBrowserManager.cmj src\TodoBrowserManager.cmi ..\js\src\TodoBrowserManager.bs.js : mij src\TodoBrowserManager.ast
+o rescript\TodoRun.cmj rescript\TodoRun.cmi ..\js\rescript\TodoRun.bs.js : mij rescript\TodoRun.ast
+o rescript\src-test\TodoTaskTest.ast : astj ..\..\rescript\src-test\TodoTaskTest.res
+o rescript\src-test\TodoTaskTest.d : deps rescript\src-test\TodoTaskTest.ast
+o rescript\src-test\TodoTaskTest.cmj rescript\src-test\TodoTaskTest.cmi ..\js\rescript\src-test\TodoTaskTest.bs.js : mij rescript\src-test\TodoTaskTest.ast
+o rescript\src-test\TodoResponsibleTest.ast : astj ..\..\rescript\src-test\TodoResponsibleTest.res
+o rescript\src-test\TodoResponsibleTest.d : deps rescript\src-test\TodoResponsibleTest.ast
+o rescript\src-test\TodoResponsibleTest.cmj rescript\src-test\TodoResponsibleTest.cmi ..\js\rescript\src-test\TodoResponsibleTest.bs.js : mij rescript\src-test\TodoResponsibleTest.ast
+o rescript\src\TodoTask.ast : astj ..\..\rescript\src\TodoTask.res
+o rescript\src\TodoTask.d : deps rescript\src\TodoTask.ast
+o rescript\src\TodoTask.cmj rescript\src\TodoTask.cmi ..\js\rescript\src\TodoTask.bs.js : mij rescript\src\TodoTask.ast
+o rescript\src\TodoService.ast : astj ..\..\rescript\src\TodoService.res
+o rescript\src\TodoService.d : deps rescript\src\TodoService.ast
+o rescript\src\TodoService.cmj rescript\src\TodoService.cmi ..\js\rescript\src\TodoService.bs.js : mij rescript\src\TodoService.ast
+o rescript\src\TodoResponsible.ast : astj ..\..\rescript\src\TodoResponsible.res
+o rescript\src\TodoResponsible.d : deps rescript\src\TodoResponsible.ast
+o rescript\src\TodoResponsible.cmj rescript\src\TodoResponsible.cmi ..\js\rescript\src\TodoResponsible.bs.js : mij rescript\src\TodoResponsible.ast
+o rescript\protocols\ResultMonad.ast : astj ..\..\rescript\protocols\ResultMonad.res
+o rescript\protocols\ResultMonad.d : deps rescript\protocols\ResultMonad.ast
+o rescript\protocols\ResultMonad.cmj rescript\protocols\ResultMonad.cmi ..\js\rescript\protocols\ResultMonad.bs.js : mij rescript\protocols\ResultMonad.ast
+o rescript\infrastructure-test\TodoStateManagerTest.ast : astj ..\..\rescript\infrastructure-test\TodoStateManagerTest.res
+o rescript\infrastructure-test\TodoStateManagerTest.d : deps rescript\infrastructure-test\TodoStateManagerTest.ast
+o rescript\infrastructure-test\TodoStateManagerTest.cmj rescript\infrastructure-test\TodoStateManagerTest.cmi ..\js\rescript\infrastructure-test\TodoStateManagerTest.bs.js : mij rescript\infrastructure-test\TodoStateManagerTest.ast
+o rescript\infrastructure\TodoStateManager.ast : astj ..\..\rescript\infrastructure\TodoStateManager.res
+o rescript\infrastructure\TodoStateManager.d : deps rescript\infrastructure\TodoStateManager.ast
+o rescript\infrastructure\TodoStateManager.cmj rescript\infrastructure\TodoStateManager.cmi ..\js\rescript\infrastructure\TodoStateManager.bs.js : mij rescript\infrastructure\TodoStateManager.ast
+o rescript\infrastructure\TodoBrowserManager.ast : astj ..\..\rescript\infrastructure\TodoBrowserManager.res
+o rescript\infrastructure\TodoBrowserManager.d : deps rescript\infrastructure\TodoBrowserManager.ast
+o rescript\infrastructure\TodoBrowserManager.cmj rescript\infrastructure\TodoBrowserManager.cmi ..\js\rescript\infrastructure\TodoBrowserManager.bs.js : mij rescript\infrastructure\TodoBrowserManager.ast

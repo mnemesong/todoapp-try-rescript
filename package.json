@@ -6,8 +6,8 @@
   "scripts": {
     "res:build": "rescript",
     "res:dev": "rescript build -w",
-    "test": "mocha ./lib/js/test",
-    "browserify": "browserify ./lib/js/src/TodoRun.bs.js > resources/bundle.js"
+    "test": "mocha ./lib/js/rescript/src-test && mocha ./lib/js/rescript/infrastructure-test",
+    "browserify": "browserify ./lib/js/rescript/TodoRun.bs.js > resources/bundle.js"
   },
   "keywords": [],
   "author": "",

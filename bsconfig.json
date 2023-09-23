@@ -2,12 +2,8 @@
     "name": "your-project-name",
     "sources": [
       {
-        "dir": "src",
-        "subdirs": false
-      },
-      {
-        "dir": "test",
-        "subdirs": false
+        "dir": "rescript",
+        "subdirs": true
       }
     ],
     "package-specs": [

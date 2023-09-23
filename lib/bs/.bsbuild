@@ -1,4 +1,4 @@
-9
+10
 TodoRun
 TodoTask
 ResultMonad
@@ -8,6 +8,7 @@ TodoResponsible
 TodoStateManager
 TodoBrowserManager
 TodoResponsibleTest
-src	test	
-1
+TodoStateManagerTest
+rescript	rescript\src	rescript\protocols	rescript\src-test	rescript\infrastructure	rescript\infrastructure-test	
+1		
 0

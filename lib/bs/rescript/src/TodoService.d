@@ -1,0 +1,1 @@
+rescript\src\TodoService.cmj : rescript\protocols\ResultMonad.cmj rescript\protocols\ResultMonad.cmi rescript\src\TodoResponsible.cmj rescript\src\TodoResponsible.cmi rescript\src\TodoTask.cmj rescript\src\TodoTask.cmi
