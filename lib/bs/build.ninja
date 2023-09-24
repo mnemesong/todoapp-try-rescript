@@ -5,7 +5,7 @@ rule astj
   command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsc.exe"  -bs-v 10.1.4  -absname -bs-ast -o $out $i
 o rescript\TodoRun.ast : astj ..\..\rescript\TodoRun.res
 rule deps
-  command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsb_helper.exe" -hash fc262227df1cf2272c71634e7c485b70 $in
+  command = "D:\urals-js\todoapp-try-rescript\node_modules\rescript\win32\bsb_helper.exe" -hash eb2737614e3428ce38c112d6d2ece377 $in
   restat = 1
 o rescript\TodoRun.d : deps rescript\TodoRun.ast
 rule mij
@@ -34,6 +34,9 @@ o rescript\protocols\ResultMonad.cmj rescript\protocols\ResultMonad.cmi ..\js\re
 o rescript\infrastructure-test\TodoStateManagerTest.ast : astj ..\..\rescript\infrastructure-test\TodoStateManagerTest.res
 o rescript\infrastructure-test\TodoStateManagerTest.d : deps rescript\infrastructure-test\TodoStateManagerTest.ast
 o rescript\infrastructure-test\TodoStateManagerTest.cmj rescript\infrastructure-test\TodoStateManagerTest.cmi ..\js\rescript\infrastructure-test\TodoStateManagerTest.bs.js : mij rescript\infrastructure-test\TodoStateManagerTest.ast
+o rescript\infrastructure\TodoServer.ast : astj ..\..\rescript\infrastructure\TodoServer.res
+o rescript\infrastructure\TodoServer.d : deps rescript\infrastructure\TodoServer.ast
+o rescript\infrastructure\TodoServer.cmj rescript\infrastructure\TodoServer.cmi ..\js\rescript\infrastructure\TodoServer.bs.js : mij rescript\infrastructure\TodoServer.ast
 o rescript\infrastructure\TodoStateManager.ast : astj ..\..\rescript\infrastructure\TodoStateManager.res
 o rescript\infrastructure\TodoStateManager.d : deps rescript\infrastructure\TodoStateManager.ast
 o rescript\infrastructure\TodoStateManager.cmj rescript\infrastructure\TodoStateManager.cmi ..\js\rescript\infrastructure\TodoStateManager.bs.js : mij rescript\infrastructure\TodoStateManager.ast

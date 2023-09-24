@@ -35,6 +35,10 @@ o TodoStateManagerTest.cmi : cp ..\bs\rescript\infrastructure-test\TodoStateMana
 o TodoStateManagerTest.cmj : cp ..\bs\rescript\infrastructure-test\TodoStateManagerTest.cmj
 o TodoStateManagerTest.cmt : cp ..\bs\rescript\infrastructure-test\TodoStateManagerTest.cmt
 o TodoStateManagerTest.res : cp ..\..\rescript\infrastructure-test\TodoStateManagerTest.res
+o TodoServer.cmi : cp ..\bs\rescript\infrastructure\TodoServer.cmi
+o TodoServer.cmj : cp ..\bs\rescript\infrastructure\TodoServer.cmj
+o TodoServer.cmt : cp ..\bs\rescript\infrastructure\TodoServer.cmt
+o TodoServer.res : cp ..\..\rescript\infrastructure\TodoServer.res
 o TodoStateManager.cmi : cp ..\bs\rescript\infrastructure\TodoStateManager.cmi
 o TodoStateManager.cmj : cp ..\bs\rescript\infrastructure\TodoStateManager.cmj
 o TodoStateManager.cmt : cp ..\bs\rescript\infrastructure\TodoStateManager.cmt
@@ -43,4 +47,4 @@ o TodoBrowserManager.cmi : cp ..\bs\rescript\infrastructure\TodoBrowserManager.c
 o TodoBrowserManager.cmj : cp ..\bs\rescript\infrastructure\TodoBrowserManager.cmj
 o TodoBrowserManager.cmt : cp ..\bs\rescript\infrastructure\TodoBrowserManager.cmt
 o TodoBrowserManager.res : cp ..\..\rescript\infrastructure\TodoBrowserManager.res
-build install.stamp : touch TodoRun.cmi TodoRun.cmj TodoTaskTest.cmi TodoTaskTest.cmj TodoResponsibleTest.cmi TodoResponsibleTest.cmj TodoTask.cmi TodoTask.cmj TodoService.cmi TodoService.cmj TodoResponsible.cmi TodoResponsible.cmj ResultMonad.cmi ResultMonad.cmj TodoStateManagerTest.cmi TodoStateManagerTest.cmj TodoStateManager.cmi TodoStateManager.cmj TodoBrowserManager.cmi TodoBrowserManager.cmj 
+build install.stamp : touch TodoRun.cmi TodoRun.cmj TodoTaskTest.cmi TodoTaskTest.cmj TodoResponsibleTest.cmi TodoResponsibleTest.cmj TodoTask.cmi TodoTask.cmj TodoService.cmi TodoService.cmj TodoResponsible.cmi TodoResponsible.cmj ResultMonad.cmi ResultMonad.cmj TodoStateManagerTest.cmi TodoStateManagerTest.cmj TodoServer.cmi TodoServer.cmj TodoStateManager.cmi TodoStateManager.cmj TodoBrowserManager.cmi TodoBrowserManager.cmj 
